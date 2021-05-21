@@ -40,7 +40,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 throw new NullReferenceException(NoResultError);
             }
 
-            string html = (string) JObject.Parse(_result)["clean_html"];
+            string html = (string) JObject.Parse(_result)["html"];
             return html;
         }
     }

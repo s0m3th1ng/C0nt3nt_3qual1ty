@@ -35,9 +35,10 @@ export class Home extends Component {
   
   submitInput() {
       const urls = this.state.input.split("\n");
+      console.log("loading..");
       
       fetch(`main?url=${urls[0]}`)
-          .then(response => response.text())
+          .then(response => response.json())
           .then(json => console.log(json));
   }
 }

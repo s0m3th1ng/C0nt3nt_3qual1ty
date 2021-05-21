@@ -10,11 +10,11 @@ namespace C0nt3nt_3qual1ty.Utils
         private readonly string _addUrl = Config.Get("Urls:EqualityAddUrl");
         private readonly string _checkStateUrl = Config.Get("Urls:EqualityCheckStateUrl");
 
-        public string GetEquality(string text, ApisRequestsHandler requestsHandler)
+        public int GetEquality(string text, ApisRequestsHandler requestsHandler)
         {
             string addingResponse = AddText(text, requestsHandler);
             string checkingKey = GetCheckingKey(addingResponse);
-            string equality = CheckCompleted(checkingKey, requestsHandler);
+            int equality = CheckCompleted(checkingKey, requestsHandler);
 
             return equality;
         }
@@ -56,7 +56,7 @@ namespace C0nt3nt_3qual1ty.Utils
             return (string) addingResult["key"];
         }
 
-        private string CheckCompleted(string checkingKey, ApisRequestsHandler requestsHandler)
+        private int CheckCompleted(string checkingKey, ApisRequestsHandler requestsHandler)
         {
             string status = null;
             string result = null;
@@ -83,7 +83,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 }
                 System.Threading.Thread.Sleep(20);
             }
-            string equality = (string) JObject.Parse(result)["result"]["report"]["equality"];
+            int equality = (int) JObject.Parse(result)["result"]["report"]["equality"];
             return equality;
         }
     }
