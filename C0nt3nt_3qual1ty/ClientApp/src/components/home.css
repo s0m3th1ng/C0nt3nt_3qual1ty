@@ -1,0 +1,19 @@
+﻿.navbar-brand:focus-visible {
+    outline: none;
+}
+
+.btn-dark {
+    margin: 5px;
+}
+
+.btn-dark:focus {
+    box-shadow: none !important;
+}
+
+.input-group-text {
+    resize: none;
+    text-align: left;
+    overflow: hidden;
+    min-height: 85px;
+    width: 100%;
+}
