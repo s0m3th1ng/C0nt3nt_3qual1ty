@@ -17,7 +17,7 @@ namespace C0nt3nt_3qual1ty.Utils
             {
                 throw new NullReferenceException(HttpRequestError);
             }
-            string translation = (string) JObject.Parse(requestResult)["translations"][0]["text"];  //???
+            string translation = (string) JObject.Parse(requestResult)["translations"][0]["text"];
             return translation;
         }
     }

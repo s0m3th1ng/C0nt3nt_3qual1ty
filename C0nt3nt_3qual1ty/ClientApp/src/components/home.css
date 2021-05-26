@@ -2,12 +2,22 @@
     outline: none;
 }
 
+.form-row {
+    margin: 20px 0;
+}
+
 .btn-dark {
-    margin: 5px;
+    margin: 5px 0;
 }
 
 .btn-dark:focus {
     box-shadow: none !important;
+}
+
+.btn-dark:disabled {
+    background-color: #848484;
+    border-color: #848484;
+    border-style: solid;
 }
 
 .input-group-text {
@@ -16,4 +26,20 @@
     overflow: hidden;
     min-height: 85px;
     width: 100%;
+}
+
+select:focus-visible {
+    outline: none;
+}
+
+#editor {
+    white-space: break-spaces;
+}
+
+.insufficient {
+    background-color: #ff4e4e;
+}
+
+.sufficient {
+    background-color: #fff;
 }

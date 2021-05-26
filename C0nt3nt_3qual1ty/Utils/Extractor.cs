@@ -43,5 +43,16 @@ namespace C0nt3nt_3qual1ty.Utils
             string html = (string) JObject.Parse(_result)["html"];
             return html;
         }
+
+        public string GetUrl()
+        {
+            if (_result == null)
+            {
+                throw new NullReferenceException(NoResultError);
+            }
+
+            string url = (string) JObject.Parse(_result)["url"];
+            return url;
+        }
     }
 }

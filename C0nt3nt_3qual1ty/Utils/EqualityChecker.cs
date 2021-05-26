@@ -29,24 +29,19 @@ namespace C0nt3nt_3qual1ty.Utils
                 @params = new
                 {
                     token = _apiKey,
-                    text = text,
+                    text
                 }
             };
-            string result = requestsHandler.PostRequestResponse(_addUrl, content).Result;
-            if (result == null)
+            string response = requestsHandler.PostRequestResponse(_addUrl, content).Result;
+            if (response == null)
             {
                 throw new NullReferenceException(HttpRequestError);
             }
-            return result;
+            return response;
         }
 
         private string GetCheckingKey(string addingResponse)
         {
-            if (addingResponse == null)
-            {
-                throw new NullReferenceException(HttpRequestError);
-            }
-
             JToken addingResult = JObject.Parse(addingResponse)["result"];
             if (addingResult["error"] != null)
             {
@@ -59,7 +54,7 @@ namespace C0nt3nt_3qual1ty.Utils
         private int CheckCompleted(string checkingKey, ApisRequestsHandler requestsHandler)
         {
             string status = null;
-            string result = null;
+            string response = null;
             var content = new
             {
                 id = 1,
@@ -76,14 +71,14 @@ namespace C0nt3nt_3qual1ty.Utils
             
             while (!Equals(status, "done"))
             {
-                result = requestsHandler.PostRequestResponse(_checkStateUrl, content).Result;
-                if (result != null)
+                response = requestsHandler.PostRequestResponse(_checkStateUrl, content).Result;
+                if (response != null)
                 {
-                    status = (string) JObject.Parse(result)["result"]["status"];
+                    status = (string) JObject.Parse(response)["result"]["status"];
                 }
-                System.Threading.Thread.Sleep(20);
+                System.Threading.Thread.Sleep(5);
             }
-            int equality = (int) JObject.Parse(result)["result"]["report"]["equality"];
+            int equality = (int) JObject.Parse(response)["result"]["report"]["equality"];
             return equality;
         }
     }

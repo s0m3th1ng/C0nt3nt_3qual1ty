@@ -9,18 +9,29 @@ namespace C0nt3nt_3qual1ty.Utils
         private readonly Translator _translator = new();
         private readonly EqualityChecker _checker = new();
 
-        public ParsedPage ParseUrl(string url)  //Maybe Urls in the method's title
+        public void SetUrl(string rawUrl)
         {
-            //possible cycle
-            _extractor.SetUrlToExtract(url, _requestsHandler);
+            _extractor.SetUrlToExtract(rawUrl, _requestsHandler);
+        }
+
+        public string GetFullUrl()
+        {
+            string fullUrl = _extractor.GetUrl();
+            return fullUrl;
+        }
+
+        public ParsedPage ParseUrl()
+        {
+            //Following line is not needed because db checking has already set the url
+            //_extractor.SetUrlToExtract(url, _requestsHandler);
             string text = _extractor.GetText();
             string translatedText = _translator.GetTranslation(text, _requestsHandler);
             int equality = _checker.GetEquality(translatedText, _requestsHandler);
             ParsedPage page = new ParsedPage()
             {
                 Html = _extractor.GetHtml(),
-                Text = text,
-                Url = url,
+                Text = translatedText,
+                Url = _extractor.GetUrl(),
                 Equality = equality
             };
             return page;
