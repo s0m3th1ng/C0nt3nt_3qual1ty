@@ -1,65 +1,78 @@
 import React, { Component } from 'react';
+import SlateEditor, {loseFocus} from './SlateEditor';
 
 import './home.css'
+import {ContentTable} from "./ContentTable";
+import {Popup} from "./Popup";
 
 export class Home extends Component {
+    
   static displayName = Home.name;
+  
+  slateInitialize = (text) => [
+      {
+          type: "paragraph",
+          children: [{ text: text }],
+      }
+  ]
   
   constructor() {
       super();
       this.state = {
-          equality: 0,
+          characterCount: "loading translation limit..",
           inputUrls: "",
-          buttonDisabled: false,
-          selectorDisabled: true,
-          selectorClass: "",
-          selectedPage: null,
-          pages: [
-              {
-                  Id: 1,
-                  Url: "loading..",
-                  Equality: 0,
-              }
-          ],
+          buttonDisabled: true,
+          buttonText: "Submit",
+          popupContent: [],
+          popupActive: false,
+          loading: true,
+          pages: [],
+          editorValue: this.slateInitialize("Choose page to edit.."),
+          editorDisabled: true,
       }
   }
   
   async componentDidMount() {
       let dbPages = await this.getPages();
-      if (dbPages.length === 0) {
-          dbPages = [
-              {
-                  Id: 1,
-                  Url: "No pages",
-                  Equality: 0,
-              }
-          ]
-      }
-      const configEquality = parseInt(await ((await fetch(`main/GetEquality`)).json()));
+      const count = await ((await fetch(`main/GetCharacterCount`)).json());
       this.setState({
-          equality: configEquality,
-          selectorDisabled: dbPages.length === 0,
+          loading: false,
+          characterCount: count,
           pages: dbPages,
       });
-      await this.handleSelectorChange();
+      console.log(dbPages);
   }
 
   render () {
     return (
       <div>
-        <h1>Hello!</h1>
+        <div className={"notesContainer"}>
+          <div className={"notes"}>
+            <h1>Hello!</h1>
+            <div className={"translationLimit"}>
+              <p>{this.state.characterCount}</p>
+            </div>
+            <p>Add URLs separated with line break (enter):</p>
+          </div>
+          <Popup active={this.state.popupActive} content={this.state.popupContent} hidePopup={this.hidePopup.bind(this)}/>
+        </div>
         <div className={"form-row"}>
-          <p>Add URLs:</p>
-          <textarea className={"input-group-text"} rows={"3"} onInput={this.handleInput.bind(this)}/>
-          <button className={"btn-dark"} type={"submit"} onClick={this.submitInput.bind(this)} disabled={this.state.buttonDisabled}>Submit</button>
+          <textarea id={"urlTextarea"} className={"input-group-text"} rows={"3"} onInput={this.handleUrlInput.bind(this)}/>
+          <button className={"btn-dark"} type={"submit"} onClick={this.submitUrlInput.bind(this)} disabled={this.state.buttonDisabled}>
+              {this.state.buttonText}
+          </button>
         </div>
         <div>
-          <select id={"selector"} disabled={this.state.selectorDisabled} className={this.state.selectorClass} onChange={this.handleSelectorChange.bind(this)}>
-              {this.state.pages.map(page => (
-                  <option key={page.Id} className={page.Equality > this.state.equality ? "sufficient" : "insufficient"}>{page.Url}</option>
-              ))}
-          </select>
-          <textarea id={"editor"} className={"input-group-text"} rows={"7"} disabled={this.state.selectorDisabled}/>
+          <div className={"tableContainer"}>
+            <ContentTable
+              pages={this.state.pages}
+              loading={this.state.loading}
+              editPage={this.editPage.bind(this)}
+              translatePage={this.translatePage}
+              downloadDoc={this.downloadDoc}
+            />
+          </div>
+          <SlateEditor readonly={this.state.editorDisabled} value={this.state.editorValue} setValue={newValue => this.setState({editorValue: newValue})}/>
         </div>
       </div>
     );
@@ -69,14 +82,23 @@ export class Home extends Component {
       return await ((await fetch(`main`)).json());
   }
   
-  async handleInput(e) {
-      this.setState({inputUrls: e.target.value});
-      e.target.style.height = "1px";
-      e.target.style.height = `${e.target.scrollHeight}px`;
+  async handleUrlInput(e) {
+      await this.handleTextareaChange(e.target);
   }
   
-  async submitInput() {
+  async handleTextareaChange(target) {
+      this.setState({
+          inputUrls: target.value,
+          buttonDisabled: !target.value.length,
+      });
+      target.style.height = "1px";
+      target.style.height = `${target.scrollHeight}px`;
+  }
+  
+  async submitUrlInput() {
       const urls = this.state.inputUrls.split("\n");
+      const urlTextarea = document.querySelector("#urlTextarea");
+      urlTextarea.disabled = true;  //Styles!
       
       // Example below!
       // const content = {
@@ -85,7 +107,10 @@ export class Home extends Component {
       // body: JSON.stringify(content)
       
       console.log("loading..");
-      this.setState({buttonDisabled: true})
+      this.setState({
+          buttonDisabled: true,
+          buttonText: "Loading..",
+      })
       
       const json = await ((await fetch(`main`, {
           method: "POST",
@@ -94,21 +119,44 @@ export class Home extends Component {
               'Content-Type': 'application/json',
           },
       })).json());
-      console.log(json);
       this.setState({
+          inputUrls: "",
+          characterCount: await ((await fetch(`main/GetCharacterCount`)).json()),
           buttonDisabled: false,
+          buttonText: "Submit",
+          popupContent: json,
+          popupActive: true,
           pages: await this.getPages(),
+      });
+      urlTextarea.disabled = false;
+      urlTextarea.value = "";
+      await this.handleTextareaChange(urlTextarea);
+  }
+  
+  async hidePopup() {
+      this.setState({
+          popupActive: false,
+      });
+      setTimeout(() => {
+          this.setState({
+              popupContent: [],
+          })
+      }, 500);
+  }
+  
+  async editPage(text) {
+      loseFocus();
+      this.setState({
+          editorValue: this.slateInitialize(text),
+          editorDisabled: false,
       });
   }
   
-  async handleSelectorChange() {
-      const selector = document.querySelector("#selector");
-      const optionClass = selector.options[selector.selectedIndex].className;
-      this.setState({
-          selectorClass: optionClass,
-          selectedPage: this.state.pages[selector.selectedIndex],
-      });
-      const editor = document.querySelector("#editor");
-      editor.value = this.state.pages[selector.selectedIndex].Text;
+  async translatePage(text) {
+      
+  }
+  
+  async downloadDoc() {
+      
   }
 }

@@ -12,7 +12,7 @@ namespace C0nt3nt_3qual1ty.Utils
 
         public void SetUrlToExtract(string extractUrl, ApisRequestsHandler requestsHandler)
         {
-            string requestUrl = $"https://extractorapi.com/api/v1/extractor?apikey={_apiKey}&url={extractUrl}";
+            string requestUrl = $"https://extractorapi.com/api/v1/extractor?apikey={_apiKey}&url={extractUrl}&fields=clean_html";
             string requestResult = requestsHandler.GetRequestResponse(requestUrl).Result;
             _result = requestResult;
             if (_result == null)
@@ -40,7 +40,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 throw new NullReferenceException(NoResultError);
             }
 
-            string html = (string) JObject.Parse(_result)["html"];
+            string html = (string) JObject.Parse(_result)["clean_html"];
             return html;
         }
 

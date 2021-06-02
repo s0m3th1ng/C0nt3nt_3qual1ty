@@ -1,0 +1,21 @@
+﻿.slate-container {
+    margin-bottom: 20px;
+    display: block;
+}
+
+.textarea {
+    min-height: 200px; /*?*/
+}
+
+.textarea p {
+    margin-bottom: 0;
+}
+
+.disabled {
+    color: #a7a7a7;
+    cursor: default;
+}
+
+.btn-secondary {
+    margin: 2px;
+}

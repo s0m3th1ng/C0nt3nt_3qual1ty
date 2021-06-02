@@ -20,6 +20,11 @@ namespace C0nt3nt_3qual1ty.Utils
             return fullUrl;
         }
 
+        public string GetTranslatorLimit()
+        {
+            return _translator.GetLimit(_requestsHandler);
+        }
+
         public ParsedPage ParseUrl()
         {
             //Following line is not needed because db checking has already set the url

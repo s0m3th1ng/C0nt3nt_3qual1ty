@@ -2,22 +2,18 @@
     outline: none;
 }
 
+.notesContainer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+.notes {
+    display: inline-block;
+    margin-right: 20px;
+}
+
 .form-row {
     margin: 20px 0;
-}
-
-.btn-dark {
-    margin: 5px 0;
-}
-
-.btn-dark:focus {
-    box-shadow: none !important;
-}
-
-.btn-dark:disabled {
-    background-color: #848484;
-    border-color: #848484;
-    border-style: solid;
 }
 
 .input-group-text {
@@ -28,18 +24,21 @@
     width: 100%;
 }
 
-select:focus-visible {
+.input-group-text:focus-visible {
     outline: none;
 }
 
-#editor {
-    white-space: break-spaces;
+.btn-dark {
+    margin: 5px 0;
+    width: 50%;
 }
 
-.insufficient {
-    background-color: #ff4e4e;
+.btn-dark:focus {
+    box-shadow: none !important;
 }
 
-.sufficient {
-    background-color: #fff;
+.btn-dark:disabled {
+    background-color: #848484;
+    border-color: #848484;
+    border-style: solid;
 }

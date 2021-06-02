@@ -32,6 +32,12 @@ namespace C0nt3nt_3qual1ty.Controllers
         {
             return JsonConvert.SerializeObject(Config.Get("EqualityEdge"));
         }
+
+        [HttpGet("[action]")]
+        public string GetCharacterCount()
+        {
+            return JsonConvert.SerializeObject(_parser.GetTranslatorLimit());
+        }
         
         [HttpPost]
         public string Post([FromBody] string[] urls)
