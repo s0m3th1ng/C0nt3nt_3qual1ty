@@ -25,6 +25,11 @@ namespace C0nt3nt_3qual1ty.Utils
             return _translator.GetLimit(_requestsHandler);
         }
 
+        public string GetPageTranslation(string html)
+        {
+            return _translator.GetFileTranslation(html, _requestsHandler);
+        }
+
         public ParsedPage ParseUrl()
         {
             //Following line is not needed because db checking has already set the url
@@ -37,6 +42,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 Html = _extractor.GetHtml(),
                 Text = translatedText,
                 Url = _extractor.GetUrl(),
+                Translated = false,
                 Equality = equality
             };
             return page;

@@ -6,7 +6,14 @@ namespace C0nt3nt_3qual1ty.Models
     {
         public DbSet<ParsedPage> Pages { get; set; }
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        { }
+        public DatabaseContext() //DbContextOptions<DatabaseContext> options) : base(options)
+        {
+            
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(Config.Get("DbConnection"));
+        }
     }
 }

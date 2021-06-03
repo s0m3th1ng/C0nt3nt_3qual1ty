@@ -1,5 +1,6 @@
 ﻿.tableContainer {
-    max-height: 300px;
+    line-height: 2;
+    max-height: 294px;
     overflow-y: auto;
     position: relative;
     margin-bottom: 20px;
@@ -7,16 +8,23 @@
 
 table {
     width: 100%;
-    max-height: 200px;
-    border-spacing: 0;
-    border-collapse: separate;
+}
+
+.table-bordered {
+    border: none;
 }
 
 .table-bordered th {
-    background-color: white;
+    border-width: 0 1px;
+    background-color: #ced3d7;
     position: sticky;
-    top: 0;
+    top: -1px;
     z-index: 2;
+}
+
+.table-bordered th, .table-bordered td {
+    border: none;
+    border-right: 2px solid #dee2e6;
 }
 
 .tdPlaceholder {
@@ -25,16 +33,16 @@ table {
 }
 
 .urlCell {
-    width: 60%;
+    width: 50%;
 }
 
 .equalityCell {
-    width: 13%;
+    width: 17%;
     text-align: center;
 }
 
 .buttonCell {
-    width: 9%;
+    width: 11%;
     text-align: center;
     position: relative;
 }
@@ -42,10 +50,10 @@ table {
 .buttonCell .btn-light::before {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    left: -1px;
+    right: -1px;
     top: 0;
-    bottom: 0;
+    bottom: -1px;
     background-color: transparent;
     z-index: -1;
 }
@@ -60,31 +68,49 @@ table {
     border-color: #dae0e5;
 }
 
+.buttonCell .btn-light:disabled:hover::before {
+    background-color: transparent;
+    border-color: #e2e6ea;
+}
+
 .buttonCell .btn-light:not(:disabled):not(.disabled):focus:active {
     box-shadow: none;
 }
 
-.buttonCell .btn-light > svg {
+.buttonCell svg {
     margin-top: -4px;
 }
 
-.btn-light {
+.buttonCell .btn-light {
     background: transparent;
     border: none;
     width: 100%; /*?*/
     height: 100%;
+    display: block;
 }
 
-.btn-light:focus {
+.buttonCell .btn-light:focus {
     outline: none;
     background-color: transparent;
     box-shadow: none;
 }
 
+.btn-light:disabled {
+    color: #6b6b6b;
+}
+
+.downloadButton, .downloadButton:focus {
+    color: #5ca6f5;
+}
+
+.downloadButton:not(:disabled):hover {
+    color: #1983ff;
+}
+
 .insufficient {
-    background-color: #ff4e4e;
+    color: #ff4e4e;
 }
 
 .sufficient {
-    background-color: #fff;
+    /*background-color: #fff;*/
 }

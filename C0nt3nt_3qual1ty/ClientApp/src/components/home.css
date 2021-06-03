@@ -16,8 +16,13 @@
     margin: 20px 0;
 }
 
+#urlTextarea {
+    margin-bottom: 10px;
+}
+
 .input-group-text {
     resize: none;
+    white-space: pre;
     text-align: left;
     overflow: hidden;
     min-height: 85px;
@@ -29,8 +34,8 @@
 }
 
 .btn-dark {
-    margin: 5px 0;
     width: 50%;
+    margin: 0 20px;
 }
 
 .btn-dark:focus {
@@ -41,4 +46,9 @@
     background-color: #848484;
     border-color: #848484;
     border-style: solid;
+}
+
+.editorFooter {
+    display: flex;
+    margin: 20px 0;
 }

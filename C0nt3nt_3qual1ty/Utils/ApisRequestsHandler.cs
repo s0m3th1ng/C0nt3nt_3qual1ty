@@ -40,5 +40,21 @@ namespace C0nt3nt_3qual1ty.Utils
             
             return response;
         }
+        
+        public async Task<string> PostFileRequestResponse(string url, MultipartContent content)
+        {
+            string response = null;
+            try
+            {
+                HttpResponseMessage responseMessage = await Client.PostAsync(url, content);
+                responseMessage.EnsureSuccessStatusCode();
+                byte[] byteResponse = await responseMessage.Content.ReadAsByteArrayAsync();
+                response = Encoding.UTF8.GetString(byteResponse);
+            }
+            catch (HttpRequestException)
+            { }
+            
+            return response;
+        }
     }
 }

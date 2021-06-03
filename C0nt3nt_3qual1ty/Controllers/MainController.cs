@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using C0nt3nt_3qual1ty.Models;
 using C0nt3nt_3qual1ty.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -38,15 +42,17 @@ namespace C0nt3nt_3qual1ty.Controllers
         {
             return JsonConvert.SerializeObject(_parser.GetTranslatorLimit());
         }
+
+        [HttpGet("[action]")]
+        public string DownloadHtml(int id)
+        {
+            ParsedPage toDownload = _db.Pages.Find(id);
+            return toDownload.Html;
+        }
         
         [HttpPost]
         public string Post([FromBody] string[] urls)
         {
-            /*
-             TODO: Check if record already exist
-             Check different equality examples
-            */
-
             List<PostUrlResponse> addedUrls = new List<PostUrlResponse>();
 
             foreach (string url in urls)
@@ -89,6 +95,34 @@ namespace C0nt3nt_3qual1ty.Controllers
         {
             _db.Pages.Add(page);
             _db.SaveChanges();
+        }
+
+        [HttpPost("[action]")]
+        public string UpdateRecord([FromBody] ParsedPage page)
+        {
+            _db.Pages.Update(page ?? throw new InvalidOperationException());
+            _db.SaveChanges();
+            return JsonConvert.SerializeObject("Record saved");
+        }
+
+        [HttpPost("[action]")]
+        public string TranslateRecord([FromBody] ParsedPage page)
+        {
+            PostTranslationResponse result;
+            try
+            {
+                string translation = _parser.GetPageTranslation(page.Html);
+                result = new PostTranslationResponse {Error = false, Text = translation};
+                page.Translated = true;
+                page.Html = translation;
+                _db.Pages.Update(page);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException e)
+            {
+                result = new PostTranslationResponse {Error = true, Text = e.Message};
+            }
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

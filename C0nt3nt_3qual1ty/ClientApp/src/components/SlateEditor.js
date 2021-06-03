@@ -1,7 +1,7 @@
 ﻿import React, {useMemo, useCallback} from "react";
 import {Button} from "reactstrap";
 import {Slate, Editable, withReact, useSlate, ReactEditor} from "slate-react";
-import {createEditor, Editor, Element as SlateElement, Transforms} from "slate";
+import {createEditor, Editor, Element as SlateElement, Node, Transforms} from "slate";
 import { withHistory } from 'slate-history';
 import {BsCodeSlash, BsTypeBold, BsTypeH1} from "react-icons/bs";
 
@@ -73,17 +73,36 @@ export default function SlateEditor(props) {
     return (
         <div className={`${props.readonly ? "disabled" : ""} slate-container input-group-text`}>
           <Slate editor={editor} value={value} onChange={newValue => props.setValue(newValue)}>
-            <div>
-              <MarkButton format={"bold"} icon={<BsTypeBold/>}/>
-              <MarkButton format={"code"} icon={<BsCodeSlash/>}/>
-              <BlockButton format={"heading-one"} icon={<BsTypeH1/>}/>
-            </div>
+              
+            {/*<div>*/}
+            {/*  <MarkButton format={"bold"} icon={<BsTypeBold/>}/>*/}
+            {/*  <MarkButton format={"code"} icon={<BsCodeSlash/>}/>*/}
+            {/*  <BlockButton format={"heading-one"} icon={<BsTypeH1/>}/>*/}
+            {/*</div>*/}
+            
             <div className={"textarea"}>
               <Editable readOnly={props.readonly} renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={e => handleHotkeys(e, editor)}/>
             </div>
           </Slate>
         </div>
     );
+}
+
+export const serialize = value => {
+    return (
+        value
+            .map(n => Node.string(n))
+            .join('\n')
+    )
+}
+
+export const deserialize = string => {
+    // Return a value array of children derived by splitting the string.
+    return string.split('\n').map(line => {
+        return {
+            children: [{ text: line }],
+        }
+    })
 }
 
 export function loseFocus() {
