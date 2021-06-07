@@ -20,6 +20,7 @@ export class Home extends Component {
           buttonText: "Submit",
           popupContent: [],
           popupActive: false,
+          popupDisplay: false,
           popupUrlActive: false,
           popupTranslateActive: false,
           loading: true,
@@ -52,10 +53,12 @@ export class Home extends Component {
   render () {
     return (
       <div>
-        <Popup active={this.state.popupActive} hidePopup={this.hidePopup.bind(this)}>
-          {this.state.popupUrlActive && <PopupUrlContent content={this.state.popupContent}/>}
-          {this.state.popupTranslateActive && <PopupTranslationContent content={this.state.popupContent}/>}
-        </Popup>
+        <div className={`notification ${this.state.popupActive && "notificationActive"} ${!this.state.popupDisplay && "notificationHidden"}`}>
+          <Popup hidePopup={this.hidePopup.bind(this)}>
+            {this.state.popupUrlActive && <PopupUrlContent content={this.state.popupContent}/>}
+            {this.state.popupTranslateActive && <PopupTranslationContent content={this.state.popupContent}/>}
+          </Popup>
+        </div>
         <div className={"notesContainer"}>
           <div className={"notes"}>
             <h1>Hello!</h1>
@@ -67,9 +70,13 @@ export class Home extends Component {
         </div>
         <div className={"form-row"}>
           <textarea id={"urlTextarea"} className={"input-group-text"} rows={"3"} onInput={this.handleUrlInput.bind(this)}/>
+          <div className={"underTextarea"}>
           <button className={"btn-dark"} type={"submit"} onClick={this.submitUrlInput.bind(this)} disabled={this.state.urlButtonDisabled}>
               {this.state.buttonText}
           </button>
+          <p>Notify when completed: </p>
+          <input id={"email"} placeholder={"e-mail"}/>
+          </div>
         </div>
         <div>
           <ContentTable
@@ -125,10 +132,12 @@ export class Home extends Component {
   async submitUrlInput() {
       const urls = this.state.inputUrls.split("\n");
       const urlTextarea = document.querySelector("#urlTextarea");
+      const emailInput = document.querySelector("#email");
       urlTextarea.disabled = true;
       
       console.log("loading..");
       this.setState({
+          popupDisplay: true,
           urlButtonDisabled: true,
           buttonText: "Loading..",
       })
@@ -140,6 +149,9 @@ export class Home extends Component {
               'Content-Type': 'application/json',
           },
       })).json());
+      urlTextarea.disabled = false;
+      urlTextarea.value = "";
+      await this.handleTextareaChange(urlTextarea);
       this.setState({
           inputUrls: "",
           characterCount: await ((await fetch(`main/GetCharacterCount`)).json()),
@@ -151,9 +163,13 @@ export class Home extends Component {
           popupTranslateActive: false,
           pages: await this.getPages(),
       });
-      urlTextarea.disabled = false;
-      urlTextarea.value = "";
-      await this.handleTextareaChange(urlTextarea);
+      await this.addingDone(emailInput.value);
+  }
+  
+  async addingDone(email) {
+      if (email.length > 0) {
+          await fetch(`main/AddingDone?email=${email}`);
+      }
   }
   
   async hidePopup() {
@@ -162,6 +178,7 @@ export class Home extends Component {
       });
       setTimeout(() => {
           this.setState({
+              popupDisplay: false,
               popupUrlActive: false,
               popupTranslateActive: false,
               popupContent: [],
@@ -189,13 +206,13 @@ export class Home extends Component {
       })
       const content = this.state.editedPage;
       content.Html = serialize(this.state.editorValue);
-      const json = await ((await fetch(`main/UpdateRecord`, {
+      await fetch(`main/UpdateRecord`, {
           method: "POST",
           body: JSON.stringify(content),
           headers: {
               'Content-Type': 'application/json',
           },
-      })).json());
+      });
       this.setState({
           editorDisabled: false,
           saveButtonText: "Save",
@@ -223,6 +240,7 @@ export class Home extends Component {
           this.setState({
               popupContent: json.Text,
               popupActive: true,
+              popupDisplay: true,
               popupUrlActive: false,
               popupTranslateActive: true,
               editorDisabled: false,
@@ -232,6 +250,7 @@ export class Home extends Component {
           });
           return;
       }
+      this.state.editedPage.Html = json.Text;
       this.state.editedPage.Translated = true;
       this.setState({
           editorValue: deserialize(json.Text),

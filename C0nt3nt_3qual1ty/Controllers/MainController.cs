@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using C0nt3nt_3qual1ty.Models;
 using C0nt3nt_3qual1ty.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace C0nt3nt_3qual1ty.Controllers
 {
@@ -32,9 +30,9 @@ namespace C0nt3nt_3qual1ty.Controllers
         }
 
         [HttpGet("[action]")]
-        public string GetEquality()
+        public string GetUniqueness()
         {
-            return JsonConvert.SerializeObject(Config.Get("EqualityEdge"));
+            return JsonConvert.SerializeObject(Config.Get("UniquenessEdge"));
         }
 
         [HttpGet("[action]")]
@@ -50,6 +48,28 @@ namespace C0nt3nt_3qual1ty.Controllers
             return toDownload.Html;
         }
         
+        [HttpGet("[action]")]
+        public string AddingDone(string email)
+        {
+            string apiKey = Config.Get("ApiKeys:EmailKey");
+            RestClient client = new RestClient
+            {
+                BaseUrl = new Uri("https://api.mailgun.net/v3"),
+                Authenticator = new HttpBasicAuthenticator("api",
+                    apiKey)
+            };
+            RestRequest request = new RestRequest ();
+            request.AddParameter ("domain", "mx.monitask.net", ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter ("from", "C0nt3nt 3qual1ty <notification@mx.monitask.net>");
+            request.AddParameter ("to", email);
+            request.AddParameter ("subject", "Come back soon");
+            request.AddParameter ("text", "Adding urls completed!");
+            request.Method = Method.POST;
+            client.Execute(request);
+            return null;
+        }
+
         [HttpPost]
         public string Post([FromBody] string[] urls)
         {

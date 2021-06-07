@@ -43,7 +43,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 Text = translatedText,
                 Url = _extractor.GetUrl(),
                 Translated = false,
-                Equality = equality
+                Uniqueness = 100 - equality
             };
             return page;
         }

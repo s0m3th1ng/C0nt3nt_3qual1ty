@@ -7,7 +7,7 @@ export class Popup extends Component {
   
   render() {
     return (
-      <div className={`popup ${this.props.active ? "active" : ""}`}>
+      <div className={"popup"}>
         <div className={"popupHeader"}>
           <p>INFO:</p>
           <button onClick={this.props.hidePopup}><BsXCircle/></button>

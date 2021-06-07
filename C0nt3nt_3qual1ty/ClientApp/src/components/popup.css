@@ -5,8 +5,6 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
-    transition: 0.4s all;
-    opacity: 0;
     padding: 8px 13px 13px;
     border-radius: 10px;
     background-color: #f4d66ae3;
@@ -15,6 +13,10 @@
 .popupHeader {
     display: flex;
     justify-content: space-between;
+}
+
+.hidden {
+    display: none;
 }
 
 .popup p {

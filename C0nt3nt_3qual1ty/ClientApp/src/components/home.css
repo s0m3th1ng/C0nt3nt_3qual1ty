@@ -7,9 +7,23 @@
     display: flex;
     justify-content: space-between;
 }
+
 .notes {
     display: inline-block;
     margin-right: 20px;
+}
+
+.notification {
+    transition: 0.4s all;
+    opacity: 0;
+}
+
+.notificationActive {
+    opacity: 1;
+}
+
+.notificationHidden {
+    display: none;
 }
 
 .form-row {
@@ -31,6 +45,20 @@
 
 .input-group-text:focus-visible {
     outline: none;
+}
+
+.underTextarea {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.underTextarea p {
+    margin: 0 0 0 20px;
+}
+
+.underTextarea input {
+    margin-right: 20px;
 }
 
 .btn-dark {

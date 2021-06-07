@@ -1,9 +1,9 @@
 ﻿import React, {useMemo, useCallback} from "react";
-import {Button} from "reactstrap";
-import {Slate, Editable, withReact, useSlate, ReactEditor} from "slate-react";
+//import {Button} from "reactstrap";
+import {Slate, Editable, withReact, /*useSlate,*/ ReactEditor} from "slate-react";
 import {createEditor, Editor, Element as SlateElement, Node, Transforms} from "slate";
 import { withHistory } from 'slate-history';
-import {BsCodeSlash, BsTypeBold, BsTypeH1} from "react-icons/bs";
+//import {BsCodeSlash, BsTypeBold, BsTypeH1} from "react-icons/bs";
 
 import './slateEditor.css';
 
@@ -97,7 +97,6 @@ export const serialize = value => {
 }
 
 export const deserialize = string => {
-    // Return a value array of children derived by splitting the string.
     return string.split('\n').map(line => {
         return {
             children: [{ text: line }],
@@ -109,35 +108,35 @@ export function loseFocus() {
     ReactEditor.deselect(defaultEditor);
 }
 
-const BlockButton = ({ format, icon }) => {
-    const editor = useSlate()
-    return (
-        <Button
-            active={CustomEditor.isBlockActive(editor, format)}
-            onMouseDown={event => {
-                event.preventDefault()
-                CustomEditor.toggleBlock(editor, format)
-            }}
-        >
-          {icon}
-        </Button>
-    )
-}
-
-const MarkButton = ({ format, icon }) => {
-    const editor = useSlate()
-    return (
-        <Button
-            active={CustomEditor.isMarkActive(editor, format)}
-            onMouseDown={event => {
-                event.preventDefault()
-                CustomEditor.toggleMark(editor, format)
-            }}
-        >
-          {icon}
-        </Button>
-    )
-}
+// const BlockButton = ({ format, icon }) => {
+//     const editor = useSlate()
+//     return (
+//         <Button
+//             active={CustomEditor.isBlockActive(editor, format)}
+//             onMouseDown={event => {
+//                 event.preventDefault()
+//                 CustomEditor.toggleBlock(editor, format)
+//             }}
+//         >
+//           {icon}
+//         </Button>
+//     )
+// }
+//
+// const MarkButton = ({ format, icon }) => {
+//     const editor = useSlate()
+//     return (
+//         <Button
+//             active={CustomEditor.isMarkActive(editor, format)}
+//             onMouseDown={event => {
+//                 event.preventDefault()
+//                 CustomEditor.toggleMark(editor, format)
+//             }}
+//         >
+//           {icon}
+//         </Button>
+//     )
+// }
 
 const RenderElement = ({ attributes, children, element }) => {
     switch (element.type) {

@@ -41,7 +41,15 @@ namespace C0nt3nt_3qual1ty.Utils
             }
 
             string html = (string) JObject.Parse(_result)["clean_html"];
+            html = DeleteFootNote(html);
+            html = html.Replace("><", ">\n<");
             return html;
+        }
+
+        private string DeleteFootNote(string html)
+        {
+            string footNote = "<i><p>Created with <a href=\"https://extractorapi.com\" target=\"_blank\">extractorapi.com</a></p></i>";
+            return html.Replace(footNote, "");
         }
 
         public string GetUrl()

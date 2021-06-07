@@ -63,7 +63,7 @@ export class PopupUrlContent extends Component {
   getErrors() {
       let errors = [];
       for (let url of this.props.content) {
-          if (!errors.includes(url.ErrorMessage)) {
+          if (url.Error && !errors.includes(url.ErrorMessage)) {
               errors.push(url.ErrorMessage);
           }
       }

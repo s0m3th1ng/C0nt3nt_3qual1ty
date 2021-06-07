@@ -32,17 +32,21 @@ table {
     line-height: 50px;
 }
 
-.urlCell {
-    width: 50%;
+.idCell {
+    width: 3%;
 }
 
-.equalityCell {
-    width: 17%;
+.urlCell {
+    width: 51%;
+}
+
+.uniquenessCell {
+    width: 16%;
     text-align: center;
 }
 
 .buttonCell {
-    width: 11%;
+    width: 10%;
     text-align: center;
     position: relative;
 }

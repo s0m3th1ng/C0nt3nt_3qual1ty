@@ -8,14 +8,14 @@ export class ContentTable extends Component {
   constructor(props) {
       super(props);
       this.state = {
-          equality: 0,
+          uniqueness: 0,
       }
   }
   
   async componentDidMount() {
-      const configEquality = parseInt(await ((await fetch(`main/GetEquality`)).json()));
+      const configUniqueness = parseInt(await ((await fetch(`main/GetUniqueness`)).json()));
       this.setState({
-          equality: configEquality,
+          uniqueness: configUniqueness,
       })
   }
     
@@ -25,8 +25,9 @@ export class ContentTable extends Component {
         <table className={"table-bordered table-striped"}>
           <thead>
             <tr>
+              <th className={"idCell"}>Id</th>
               <th className={"urlCell"}>URL</th>
-              <th className={"equalityCell"}>Equality</th>
+              <th className={"uniquenessCell"}>Uniqueness</th>
               <th className={"buttonCell"}>Edit</th>
               <th className={"buttonCell"}>Translated</th>
               <th className={"buttonCell"}>Download</th>
@@ -41,8 +42,9 @@ export class ContentTable extends Component {
               ) :
               this.props.pages.map(page => (
                   <tr key={page.Id}>
+                    <td className={"idCell"}>{page.Id}</td>
                     <td className={"urlCell"}>{page.Url}</td>
-                    <td className={`equalityCell ${page.Equality > this.state.equality ? "sufficient" : "insufficient"}`}>{page.Equality}</td>
+                    <td className={`uniquenessCell ${page.Uniqueness > this.state.uniqueness ? "sufficient" : "insufficient"}`}>{page.Uniqueness}</td>
                     <td className={"buttonCell"}>
                       <button className={"btn-light"} onClick={this.props.editPage.bind(this, page)}><BsPen/></button>
                     </td>
@@ -51,7 +53,7 @@ export class ContentTable extends Component {
                     </td>
                     <td className={"buttonCell"}>
                       <a 
-                        download={`${page.Url.slice(0, 15)}.._.html`}
+                        download={`${page.Id}.html`}
                         className={"btn-light downloadButton"}
                         href={`main/DownloadHtml?id=${page.Id}`}
                       >
