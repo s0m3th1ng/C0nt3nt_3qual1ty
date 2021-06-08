@@ -112,7 +112,7 @@ export class Home extends Component {
   }
   
   async getPages() {
-      return await ((await fetch(`main`)).json());
+      return await ((await fetch(`main/GetPages`)).json());
   }
   
   async handleUrlInput(e) {
@@ -142,7 +142,7 @@ export class Home extends Component {
           buttonText: "Loading..",
       })
       
-      const json = await ((await fetch(`main`, {
+      const json = await ((await fetch(`main/PostUrls`, {
           method: "POST",
           body: JSON.stringify(urls),
           headers: {

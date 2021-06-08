@@ -23,8 +23,8 @@ namespace C0nt3nt_3qual1ty.Controllers
             _parser = new UrlParser();
         }
 
-        [HttpGet]
-        public string Get()
+        [HttpGet("[action]")]
+        public string GetPages()
         {
             return JsonConvert.SerializeObject(_db.Pages.ToArray());
         }
@@ -64,14 +64,14 @@ namespace C0nt3nt_3qual1ty.Controllers
             request.AddParameter ("from", "C0nt3nt 3qual1ty <notification@mx.monitask.net>");
             request.AddParameter ("to", email);
             request.AddParameter ("subject", "Come back soon");
-            request.AddParameter ("text", "Adding urls completed!");
+            request.AddParameter ("text", "Adding urls completed!\nDo not reply this e-mail.");
             request.Method = Method.POST;
             client.Execute(request);
             return null;
         }
 
-        [HttpPost]
-        public string Post([FromBody] string[] urls)
+        [HttpPost("[action]")]
+        public string PostUrls([FromBody] string[] urls)
         {
             List<PostUrlResponse> addedUrls = new List<PostUrlResponse>();
 

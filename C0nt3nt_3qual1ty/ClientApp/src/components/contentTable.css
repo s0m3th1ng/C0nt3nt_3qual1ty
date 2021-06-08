@@ -34,10 +34,15 @@ table {
 
 .idCell {
     width: 3%;
+    text-align: center;
 }
 
 .urlCell {
     width: 51%;
+}
+
+th.urlCell {
+    text-align: center;
 }
 
 .uniquenessCell {
