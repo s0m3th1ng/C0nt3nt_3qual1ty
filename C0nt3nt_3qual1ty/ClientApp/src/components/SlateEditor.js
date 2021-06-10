@@ -71,7 +71,7 @@ export default function SlateEditor(props) {
     const renderLeaf = useCallback(props => <Leaf {...props} />, []);
 
     return (
-        <div className={`${props.readonly ? "disabled" : ""} slate-container input-group-text`}>
+        <div className={"slate-container input-group-text"}>
           <Slate editor={editor} value={value} onChange={newValue => props.setValue(newValue)}>
               
             {/*<div>*/}
@@ -79,8 +79,12 @@ export default function SlateEditor(props) {
             {/*  <MarkButton format={"code"} icon={<BsCodeSlash/>}/>*/}
             {/*  <BlockButton format={"heading-one"} icon={<BsTypeH1/>}/>*/}
             {/*</div>*/}
-            
-            <div className={"textarea"}>
+            <div className={"counters"}>
+                <p>Symbols: {props.readonly ? "" : symbolsCount(serialize(value))}</p>
+                <p>Symbols (with spaces): {props.readonly ? "" : symbolsCountWithSpaces(serialize(value))}</p>
+                <p>Words: {props.readonly ? "" : wordsCount(serialize(value))}</p>
+            </div>
+            <div className={`${props.readonly ? "disabled" : ""} textarea`}>
               <Editable readOnly={props.readonly} renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={e => handleHotkeys(e, editor)}/>
             </div>
           </Slate>
@@ -106,6 +110,30 @@ export const deserialize = string => {
 
 export function loseFocus() {
     ReactEditor.deselect(defaultEditor);
+}
+
+const symbolsCountWithSpaces = value => {
+    value = withoutTags(value);
+    value = value.replaceAll("\n", "");
+    return value.length;
+}
+
+const symbolsCount = value => {
+    value = withoutTags(value);
+    value = value.replaceAll("\n", "");
+    value = value.replaceAll(" ", "");
+    return value.length;
+}
+
+const wordsCount = value => {
+    value = withoutTags(value);
+    value = value.replaceAll("\n", " ");
+    value = value.replaceAll(/\s+/g, " ");
+    return value.split(" ").length;
+}
+
+const withoutTags = value => {
+    return value.replaceAll(/<.*?>/g, "");
 }
 
 // const BlockButton = ({ format, icon }) => {

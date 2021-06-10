@@ -41,7 +41,7 @@ export class ContentTable extends Component {
                   </tr>
               ) :
               this.props.pages.map(page => (
-                  <tr key={page.Id}>
+                  <tr className={this.props.editedPageId === page.Id ? "highlighted" : ""} key={page.Id}>
                     <td className={"idCell"}>{page.Id}</td>
                     <td className={"urlCell"}>{page.Url}</td>
                     <td className={`uniquenessCell ${page.Uniqueness > this.state.uniqueness ? "sufficient" : "insufficient"}`}>{page.Uniqueness}</td>

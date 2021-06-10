@@ -82,6 +82,7 @@ export class Home extends Component {
           <ContentTable
             pages={this.state.pages}
             loading={this.state.loading}
+            editedPageId={this.state.editedPage == null ? -1 : this.state.editedPage.Id}
             editPage={this.editPage.bind(this)}
             downloadDoc={pageId => this.downloadDoc(pageId)}
           />
