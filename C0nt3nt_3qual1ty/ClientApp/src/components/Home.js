@@ -81,6 +81,7 @@ export class Home extends Component {
         <div>
           <ContentTable
             pages={this.state.pages}
+            resetPages={newPages => this.setState({pages: newPages})}
             loading={this.state.loading}
             editedPageId={this.state.editedPage == null ? -1 : this.state.editedPage.Id}
             editPage={this.editPage.bind(this)}
@@ -141,7 +142,7 @@ export class Home extends Component {
           popupDisplay: true,
           urlButtonDisabled: true,
           buttonText: "Loading..",
-      })
+      });
       
       const json = await ((await fetch(`main/PostUrls`, {
           method: "POST",
@@ -204,9 +205,11 @@ export class Home extends Component {
           saveButtonDisabled: true,
           saveButtonText: "Saving..",
           translateButtonDisabled: true,
-      })
+      });
       const content = this.state.editedPage;
       content.Html = serialize(this.state.editorValue);
+      content.Edited = true;
+      content.Linked = /<a.+monitask.com.*>/.test(content.Html);
       await fetch(`main/UpdateRecord`, {
           method: "POST",
           body: JSON.stringify(content),
@@ -218,7 +221,7 @@ export class Home extends Component {
           editorDisabled: false,
           saveButtonText: "Save",
           translateButtonDisabled: content.Translated,
-      })
+      });
   }
 
   async translatePage() {

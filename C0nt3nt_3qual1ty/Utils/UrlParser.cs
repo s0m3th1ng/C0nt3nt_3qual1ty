@@ -42,8 +42,7 @@ namespace C0nt3nt_3qual1ty.Utils
                 Html = _extractor.GetHtml(),
                 Text = translatedText,
                 Url = _extractor.GetUrl(),
-                Translated = false,
-                Uniqueness = 100 - equality
+                Uniqueness = 100 - equality,
             };
             return page;
         }
